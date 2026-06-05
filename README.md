@@ -60,27 +60,27 @@ Wanderlust is a full-stack vacation rental platform inspired by Airbnb. Users ca
 
 ### Home Page
 
-![Home Page](public/screenshots/home.png)
+![Home Page](./screenshots/home.png)
 
 ### Listing Details
 
-![Listing Details](public/screenshots/listing-details.png)
+![Listing Details](./screenshots/listing-details.png)
 
 ### Search Functionality
 
-![Search Functionality](public/screenshots/search.png)
+![Search Functionality](./screenshots/search.png)
 
 ### Category Filtering
 
-![Category Filtering](public/screenshots/filter.png)
+![Category Filtering](./screenshots/filter.png)
 
 ### Login Page
 
-![Login Page](public/screenshots/login.png)
+![Login Page](./screenshots/login.png)
 
 ### Create Listing
 
-![Create Listing](public/screenshots/create-listing.png)
+![Create Listing](./screenshots/create-listing.png)
 
 ## Project Structure
 
@@ -127,10 +127,16 @@ Wanderlust/
 │   ├── css/
 │   │   └── style.css
 │   │
-│   ├── js/
-│   │   └── script.js
-│   │
-│   └── screenshots/
+│   └── js/
+│       └── script.js
+│
+├── screenshots/
+│   ├── home.png
+│   ├── listing-details.png
+│   ├── search.png
+│   ├── filter.png
+│   ├── login.png
+│   └── create-listing.png
 │
 ├── init/
 │   ├── data.js
@@ -184,14 +190,14 @@ The application follows the MVC (Model-View-Controller) architecture:
 
 ## Environment Variables
 
-    Create a `.env` file in the root directory and add the following variables:
+Create a `.env` file in the root directory and add the following variables:
 
-    ```env
-    SECRET=your_secret_key
-    CLOUD_NAME=your_cloud_name
-    CLOUD_API_KEY=your_cloud_api_key
-    CLOUD_API_SECRET=your_cloud_api_secret
-    ```
+```env
+SECRET=your_secret_key
+CLOUD_NAME=your_cloud_name
+CLOUD_API_KEY=your_cloud_api_key
+CLOUD_API_SECRET=your_cloud_api_secret
+```
 
 ## Future Improvements
     - Wishlist / Favorites Functionality
@@ -200,6 +206,8 @@ The application follows the MVC (Model-View-Controller) architecture:
     - Interactive Maps Integration
 
 ## Author
-   - Abdul Rehan
-   - GitHub: https://github.com/AbdulRehan-2806
-   This project was developed to gain hands-on experience in full-stack web development using Node.js, Expressjs, MongoDB, Passport.js, Cloudinary, and the MVC architecture.
+   **Abdul Rehan**
+
+GitHub: https://github.com/AbdulRehan-2806
+
+This project was developed to gain hands-on experience in full-stack web development using Node.js, Express.js, MongoDB, Passport.js, Cloudinary, and the MVC architecture.
