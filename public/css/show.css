@@ -1,0 +1,155 @@
+.airbnb-reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.airbnb-review-card {
+    padding: 0;
+    border: none;
+    background: transparent;
+    position: relative;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.reviewer-avatar {
+    margin-right: 12px;
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.reviewer-info {
+    flex: 1;
+}
+
+.reviewer-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #222222;
+    margin-bottom: 2px;
+}
+
+.reviewer-tenure {
+    font-size: 14px;
+    color: #717171;
+}
+
+.review-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.stars-container {
+    display: flex;
+    margin-right: 8px;
+}
+
+.star {
+    font-size: 12px;
+    margin-right: 1px;
+}
+
+.star.filled {
+    color: #222222;
+}
+
+.star.empty {
+    color: #DDDDDD;
+}
+
+.review-date {
+    font-size: 14px;
+    color: #717171;
+    margin-left: 8px;
+}
+
+.review-content {
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+.review-text {
+    font-size: 16px;
+    color: #222222;
+    margin-bottom: 8px;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+.show-more-btn {
+    background: none;
+    border: none;
+    color: #222222;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: underline;
+    padding: 0;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.show-more-btn:hover {
+    color: #000000;
+}
+
+.delete-review-form {
+    margin-top: 12px;
+}
+
+.delete-btn {
+    font-size: 12px;
+    padding: 4px 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .airbnb-reviews-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .reviewer-name {
+        font-size: 15px;
+    }
+    
+    .review-text {
+        font-size: 15px;
+    }
+}
+
+/* Show more functionality */
+.review-text.expanded {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+    display: block;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+.show-more-btn.expanded::after {
+    content: " less";
+}

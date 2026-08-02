@@ -1,36 +1,122 @@
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
+    <a class="navbar-brand brand-mark" href="/listings">
+      <span class="brand-badge">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="9.5" stroke="white" stroke-width="1.3"/>
+          <path d="M15.8 8.2L13 13L8.2 15.8L11 11L15.8 8.2Z" fill="white"/>
+          <circle cx="12" cy="12" r="1.1" fill="#E7A93E"/>
+        </svg>
+      </span>
+      <span class="brand-word">Wanderlust</span>
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="/listings">Explore</a>
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Explore
+          </a>
+          <ul class="dropdown-menu explore-dropdown">
+            <li><a class="dropdown-item" href="/listings">All stays</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/listings?category=trending"><i class="fa-solid fa-fire me-2"></i>Trending</a></li>
+            <li><a class="dropdown-item" href="/listings?category=rooms"><i class="fa-solid fa-bed me-2"></i>Rooms</a></li>
+            <li><a class="dropdown-item" href="/listings?category=mountains"><i class="fa-solid fa-mountain me-2"></i>Mountains</a></li>
+            <li><a class="dropdown-item" href="/listings?category=arctic"><i class="fa-solid fa-snowflake me-2"></i>Arctic</a></li>
+          </ul>
+        </div>
       </div>
       <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search" action="/listings" method="GET">
-    <input class="form-control me-2"
-       type="search"
-       name="search"
-       placeholder="Search Destination"
-       value="<%= typeof search !== 'undefined' ? search : '' %>"/>
-
-    <button class="btn btn-search" type="submit">
-        <i class="fa-solid fa-magnifying-glass"></i>Search
-    </button>
-</form>
+        <form class="search-pill position-relative" role="search" action="/listings" method="GET" id="search-form" autocomplete="off">
+            <i class="fa-solid fa-magnifying-glass search-pill-icon"></i>
+            <input class="search-pill-input"
+               type="search"
+               name="search"
+               id="search-input"
+               placeholder="Search destinations"
+               value="<%= typeof search !== 'undefined' ? search : '' %>"/>
+            <button class="search-pill-btn" type="submit" aria-label="Search">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <div id="search-suggestions" class="search-suggestions-dropdown" style="display: none;"></div>
+        </form>
       </div>
-      <div class="navbar-nav ms-auto">
-        <a class="nav-link" href="/listings/new">Wanderlust your home</a>
+      <div class="navbar-nav ms-auto align-items-md-center gap-2">
+        <a class="nav-link btn-nav" href="/listings/new">Wanderlust your home</a>
         <% if(!currUser) {%>
-        <a class="nav-link" href="/signup"><b>Sign Up</b></a>
-        <a class="nav-link" href="/login"><b>Log In</b></a>
+        <a class="nav-link btn-nav-plain" href="/signup">Sign Up</a>
+        <a class="nav-link btn-nav btn-nav-filled" href="/login">Log In</a>
         <% } %>
         <% if(currUser) { %>
-        <a class="nav-link" href="/logout"><b></b>Log Out</b></a>
+        <a class="nav-link btn-nav" href="/profile">Profile</a>
+        <a class="nav-link btn-nav-plain" href="/logout">Log Out</a>
         <% } %>
       </div>
     </div>
   </div>
 </nav>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search-input");
+    const suggestionsBox = document.getElementById("search-suggestions");
+    const searchForm = document.getElementById("search-form");
+    let debounceTimer;
+
+    if (!searchInput) return;
+
+    searchInput.addEventListener("input", function () {
+        clearTimeout(debounceTimer);
+        const query = searchInput.value.trim();
+
+        if (query.length === 0) {
+            suggestionsBox.style.display = "none";
+            suggestionsBox.innerHTML = "";
+            const currentParams = new URLSearchParams(window.location.search);
+            if (currentParams.has("search")) {
+                window.location.href = "/listings";
+            }
+            return;
+        }
+
+        debounceTimer = setTimeout(async () => {
+            try {
+                const res = await fetch(`/listings/api/suggestions?q=${encodeURIComponent(query)}`);
+                const data = await res.json();
+                renderSuggestions(data.suggestions || []);
+            } catch (err) {
+                console.error("Suggestion fetch failed:", err);
+            }
+        }, 300);
+    });
+
+    function renderSuggestions(suggestions) {
+        if (suggestions.length === 0) {
+            suggestionsBox.style.display = "none";
+            suggestionsBox.innerHTML = "";
+            return;
+        }
+        suggestionsBox.innerHTML = suggestions
+            .map(s => `<div class="suggestion-item">${s}</div>`)
+            .join("");
+        suggestionsBox.style.display = "block";
+
+        document.querySelectorAll(".suggestion-item").forEach(item => {
+            item.addEventListener("click", () => {
+                searchInput.value = item.textContent;
+                suggestionsBox.style.display = "none";
+                searchForm.submit();
+            });
+        });
+    }
+
+    document.addEventListener("click", function (e) {
+        if (!searchForm.contains(e.target)) {
+            suggestionsBox.style.display = "none";
+        }
+    });
+});
+</script>

@@ -10,18 +10,23 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const { initScheduledJobs } = require("./utils/scheduler.js");
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const bookingRouter = require("./routes/booking.js");
+const profileRouter = require("./routes/profile.js");
 
 async function main(){
     await mongoose.connect(MONGO_URL);
     console.log("Connected to DB");
+    initScheduledJobs();
     app.listen(8080, () => {
         console.log("Server listening at port 8080");
     });
@@ -32,11 +37,25 @@ main().catch(err => console.log(err));
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 app.use(express.urlencoded({extended:true}));
+app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine('ejs' , ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
+const store = MongoStore.create({
+    mongoUrl: MONGO_URL,
+    crypto: {
+        secret: process.env.SECRET,
+    },
+    touchAfter: 24 * 3600,
+});
+
+store.on("error", (err) => {
+    console.log("SESSION STORE ERROR:", err);
+});
+
 const sessionOptions = {
+    store,
     secret : process.env.SECRET,
     resave : false,
     saveUninitialized :true,
@@ -81,6 +100,8 @@ app.get("/demouser",async(req,res)=>{
 
 app.use("/listings",listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
+app.use("/listings/:id/bookings", bookingRouter);
+app.use("/profile", profileRouter);
 app.use("/",userRouter);
 
 

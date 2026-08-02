@@ -44,6 +44,12 @@
     <div class="invalid-feedback">Please enter a valid Location</div>
 </div>
 
+<div class="mb-3 mt-3">
+    <label for="maxGuests" class="form-label">Max Guests</label>
+    <input name="listing[maxGuests]" type="number" min="1" value="<%= listing.maxGuests %>" class="form-control" required>
+    <div class="invalid-feedback">Please enter the maximum number of guests</div>
+  </div>
+
 <div class="mb-3">
     <label class="form-label">Category</label>
     <select name="listing[category]" class="form-select" required>

@@ -5,7 +5,6 @@ const {listingSchema , reviewSchema} = require("./schema.js");
 
 module.exports.isLoggedIn = (req,res,next)=>{
     if(! req.isAuthenticated()){
-        //redirect URL
         req.session.redirectUrl = req.originalUrl;
         req.flash("error" , "You must be logged in to create a listing!");
         return res.redirect("/login");
@@ -64,3 +63,39 @@ module.exports.isReviewAuthor = async(req,res,next)=>{
     }
     next();
 }
+
+module.exports.validateDatesNull = (req, res, next) => {
+    let {id} = req.params;
+    let {checkin, checkout, guests} = req.body;
+    if(checkin == '' || checkout == "Add date"){
+        req.flash("error", "Please select all the fields to continue");
+        return res.redirect(`/listings/${id}`);
+    }
+    next();
+};
+
+module.exports.isLoggedInToBook = (req, res, next) => {
+    if(!req.isAuthenticated()){
+        req.session.redirectUrl = req.originalUrl.replace("/bookings", "");
+        req.flash("error", "You must be logged in to reserve a booking");
+        return res.redirect("/login");
+    }
+    next();
+};
+
+module.exports.isLoggedInToCancel = (req, res, next) => {
+    if(!req.isAuthenticated()){
+        req.session.redirectUrl = "/listings";
+        req.flash("error", "You must be logged in to reserve a booking");
+        return res.redirect("/login");
+    }
+    next();
+};
+
+module.exports.isAuthenticated = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    req.flash("error", "You must be logged in to change password");
+    res.redirect("/login");
+};

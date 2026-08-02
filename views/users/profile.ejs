@@ -1,0 +1,325 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center">
+                            <div class="profile-avatar">
+                                <i class="fa-solid fa-user-circle fa-5x" style="color: #fe424d;"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-10 mt-2 mb-3">
+                            <h2 class="mb-1"><%= currUser.username %></h2>
+                            <p class="text-muted mb-2"><i class="fa-solid fa-envelope"></i> <%= currUser.email %></p>
+                            <button data-bs-toggle="modal" data-bs-target="#editProfileModal" class="btn btn-primary" style="background-color: #fe424d; border-color: #fe424d;">
+                                <i class="fa-solid fa-edit"></i> Edit Profile
+                            </button>
+                            <button data-bs-toggle="modal" data-bs-target="#changePasswordModal" class="btn btn-primary" style="background-color: #fe424d; border-color: #fe424d;">
+                                <i class="fa-solid fa-lock"></i> Change Password
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body mt-2 mb-2">
+                    <h3 style="color: #fe424d;"><%= user.listings ? user.listings.length : 0 %></h3>
+                    <p class="mb-0">Listings</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body mt-2 mb-2">
+                    <h3 class="text-success"><%= user.bookings ? user.bookings.length : 0 %></h3>
+                    <p class="mb-0">Bookings</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body mt-2 mb-2">
+                    <h3 class="text-warning"><%= user.reviews ? user.reviews.length : 0 %></h3>
+                    <p class="mb-0">Reviews</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="listings-tab" data-bs-toggle="tab" data-bs-target="#listings" type="button" role="tab">
+                        <i class="fa-solid fa-home"></i> My Listings
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="bookings-tab" data-bs-toggle="tab" data-bs-target="#bookings" type="button" role="tab">
+                        <i class="fa-solid fa-calendar-check"></i> My Bookings
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                        <i class="fa-solid fa-star"></i> My Reviews
+                    </button>
+                </li>
+            </ul>
+
+            <div class="tab-content mt-3" id="profileTabsContent">
+                <!-- Listings Tab -->
+                <div class="tab-pane fade show active" id="listings" role="tabpanel">
+                    <% if(user.listings && user.listings.length > 0) { %>
+                        <div class="row">
+                            <% for(let listing of user.listings) { %>
+                                <div class="col-md-6 col-lg-4 mb-3">
+                                    <%
+                                        let avgRating = 0;
+                                        if(listing.reviews && listing.reviews.length > 0){
+                                            let total = 0;
+                                            for(let review of listing.reviews){
+                                                total += review.rating;
+                                            }
+                                            avgRating = total/listing.reviews.length;
+                                        }
+                                    %>
+                                    <a href="/listings/<%= listing._id %>" class="listing-link">
+                                        <div class="card col listing-card mb-1">
+                                            <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 11rem;">
+                                            <div class="card-img-overlay"></div>
+                                            <div class="card-body">
+                                                <p class="card-text plus-jakarta-sans-font">
+                                                    <b><%= listing.title %></b> <br/>
+                                                    <span class="listing-price">&#8377;<%= listing.price.toLocaleString("en-IN") %> for 1 night &middot; ★ <%= avgRating.toFixed(2) %></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="d-flex gap-2">
+                                        <a href="/listings/<%= listing._id %>" class="btn btn-sm btn-primary" style="background-color: #fe424d; border-color: #fe424d;">View</a>
+                                        <a href="/listings/<%= listing._id %>/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                        <form action="/listings/<%= listing._id %>?_method=DELETE" method="POST">
+                                            <button class="btn btn-sm btn-primary" style="background-color: #fe424d; border-color: #fe424d;">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% } else { %>
+                        <div class="text-center py-5">
+                            <i class="fa-solid fa-home fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No listings yet</h5>
+                            <p class="text-muted">Start hosting by creating your first listing!</p>
+                            <a href="/listings/new" class="btn btn-primary" style="background-color: #fe424d; border-color: #fe424d;">Create Listing</a>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Bookings Tab -->
+                <div class="tab-pane fade" id="bookings" role="tabpanel">
+                    <% if(user.bookings && user.bookings.length > 0) { %>
+                        <div class="row">
+                            <% for(let booking of user.bookings) { %>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title" style="padding: 10px;"><%= booking.listing ? booking.listing.title : 'Listing' %></h6>
+                                            <p class="card-text" style="padding: 10px;">
+                                                <i class="fa-solid fa-calendar"></i>
+                                                <%= booking.checkIn ? booking.checkIn.toLocaleDateString() : 'N/A' %> -
+                                                <%= booking.checkOut ? booking.checkOut.toLocaleDateString() : 'N/A' %><br><br>
+                                                <strong>Total: ₹<%= booking.totalPrice || 'N/A' %></strong>
+                                            </p>
+                                            <div class="d-flex gap-2" style="padding: 10px;">
+                                                <% if(booking.listing) { %>
+                                                <a href="/listings/<%= booking.listing._id %>" class="btn btn-sm btn-primary" style="background-color: #fe424d; border-color: #fe424d;">View</a>
+                                                <% if(booking.status === "confirmed") { %>
+                                                    <a href="/listings/<%= booking.listing._id %>/bookings/<%= booking._id %>/delete" class="btn btn-sm btn-primary" style="background-color: #fe424d; border-color: #fe424d;">Cancel</a>
+                                                <% } %>
+                                                <% } %>
+                                            </div>
+                                            <p class="card-text" style="padding: 10px;">
+                                                <span class="badge bg-<%= booking.status === 'confirmed' ? 'success' : booking.status === 'pending' ? 'warning' : 'secondary' %> p-2">
+                                                    <%= booking.status || 'Pending' %>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% } else { %>
+                        <div class="text-center py-5">
+                            <i class="fa-solid fa-calendar-check fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No bookings yet</h5>
+                            <p class="text-muted">Explore amazing places and make your first booking!</p>
+                            <a href="/listings" class="btn btn-primary" style="background-color: #fe424d; border-color: #fe424d;">Explore Listings</a>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Reviews Tab -->
+                <div class="tab-pane fade" id="reviews" role="tabpanel">
+                    <% if(user.reviews && user.reviews.length > 0) { %>
+                        <div class="row">
+                            <% for(let review of user.reviews) { %>
+                                <div class="col-md-6 mb-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                                <h6 class="card-title mb-0" style="padding: 10px;"><%= review.listing ? review.listing.title : 'Listing' %></h6>
+                                                <div class="text-warning" style="padding: 10px;">
+                                                    <% for(let i = 1; i <= 5; i++) { %><i class="fa-<%= i <= (review.rating || 0) ? 'solid' : 'regular' %> fa-star text-dark"></i><% } %>
+                                                </div>
+                                            </div>
+                                            <div class="review-content" style="padding: 10px; font-size: medium;">
+                                                <p class="review-text"><%= review.comment %></p>
+                                            </div>
+                                            <small class="text-muted" style="padding: 10px;">
+                                                <%= review.createdAt ? review.createdAt.toLocaleDateString() : 'Recently' %>
+                                            </small>
+                                            <br>
+                                            <% if(review.listing) { %>
+                                            <div class="d-flex gap-2" style="padding: 10px;">
+                                                <form action="/listings/<%= review.listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="POST">
+                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% } else { %>
+                        <div class="text-center py-5">
+                            <i class="fa-solid fa-star fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No reviews yet</h5>
+                            <p class="text-muted">Book a stay and share your experience!</p>
+                            <a href="/listings" class="btn btn-primary" style="background-color: #fe424d; border-color: #fe424d;">Explore Listings</a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="/profile/edit" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" value="<%= currUser.username %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<%= currUser.email %>" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #fe424d; border-color: #fe424d;">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="changePasswordForm" action="/profile/change-password" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="currentPassword" class="form-label">Current Password</label>
+                        <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
+                        <div id="passwordHelpCurrent" class="form-text text-danger d-none">Incorrect Password</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPasswordChange" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="newPasswordChange" name="newPassword" required minlength="6">
+                        <div id="passwordHelpNew" class="form-text text-danger d-none">Passwords do not match.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPasswordChange" class="form-label">Confirm New Password</label>
+                        <input type="password" class="form-control" id="confirmPasswordChange" name="confirmPassword" required minlength="6">
+                        <div id="passwordHelpConfirm" class="form-text text-danger d-none">Passwords do not match.</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #fe424d; border-color: #fe424d;">Change Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById("changePasswordForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const currentPassword = document.getElementById("currentPassword");
+            const newPassword = document.getElementById("newPasswordChange");
+            const confirmPassword = document.getElementById("confirmPasswordChange");
+            const currentPasswordHelp = document.getElementById("passwordHelpCurrent");
+            const newPasswordHelp = document.getElementById("passwordHelpNew");
+            const confirmPasswordHelp = document.getElementById("passwordHelpConfirm");
+
+            const data = {
+                currentPassword: currentPassword.value,
+                newPassword: newPassword.value,
+                confirmPassword: confirmPassword.value,
+            };
+
+            const response = await fetch("/profile/password-check", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            currentPasswordHelp.classList.toggle("d-none", !(!result.success && result.message === "Current password is incorrect"));
+            const mismatch = !result.success && result.message === "New passwords do not match";
+            newPasswordHelp.classList.toggle("d-none", !mismatch);
+            confirmPasswordHelp.classList.toggle("d-none", !mismatch);
+
+            if(result.success){
+                document.getElementById("changePasswordForm").submit();
+            }
+        });
+    });
+</script>
+
+<style>
+.profile-avatar { margin-bottom: 1rem; }
+.nav-tabs .nav-link { color: #6c757d; border: none; border-bottom: 2px solid transparent; }
+.nav-tabs .nav-link.active { color: #fe424d; border-bottom: 2px solid #fe424d; background-color: transparent; }
+.nav-tabs .nav-link:hover { color: #fe424d; border-bottom: 2px solid #fe424d; }
+.card { transition: transform 0.2s; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+.badge { text-transform: capitalize; }
+</style>

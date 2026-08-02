@@ -1,37 +1,87 @@
 # Wanderlust
 
-Wanderlust is a full-stack vacation rental platform inspired by Airbnb. Users can browse properties, search destinations, filter listings by category, upload listing images, leave reviews, and securely manage their own listings through authentication and authorization.
+Wanderlust is a full-stack vacation rental platform inspired by Airbnb, designed to provide a complete property hosting and booking experience. Users can browse listings, search destinations with live suggestions, make bookings through an interactive availability calendar, manage their profiles, upload listing images, leave reviews, and securely manage their own properties through authentication and authorization. The application follows the MVC architecture and emphasizes scalable backend design, clean UI/UX, and real-world business logic.
 
 ## Project Highlights
 
 - Secure Authentication & Authorization
+- Complete Booking & Reservation System
+- Interactive Booking Calendar with Date Availability
+- User Profile Dashboard
+- Live Search Suggestions
 - Cloudinary Image Uploads
-- Search Functionality
-- Category Filters
 - Review & Rating System
-- Responsive Design
+- Advanced Search & Category Filtering
+- Persistent Login Sessions using MongoDB
+- Fully Redesigned Modern User Interface
+- MVC Architecture
 
 ## Features
 
-- User Authentication (Sign Up / Login / Logout)
-- Authorization for Listings and Reviews
+### Authentication & Authorization
+- User Registration, Login and Logout
+- Secure Password Hashing using Passport Local
+- Role-based Authorization for Listings and Reviews
+- Persistent Login Sessions using MongoDB Session Store
+
+### Listings
 - Create, Edit and Delete Listings
-- Upload Listing Images using Cloudinary
-- Add and Delete Reviews
-- Category-Based Filtering
-- Search Listings by Title, Location, and Country
+- Upload Images using Cloudinary
+- Set Maximum Guest Capacity
+- Listing Owner Management
+- Responsive Listing Detail Page
+
+### Booking System
+- Interactive Date Picker
+- Prevents Double Bookings using Date Overlap Validation
+- Live Availability Calendar
+- Guest Count Validation
+- Automatic Price Calculation
+- 18% GST Calculation
+- Booking Confirmation Page
+- Booking Cancellation
+- Daily Automatic Booking Completion Scheduler
+- "Your Bookings" section for every listing
+
+### Reviews
+- Add Reviews and Ratings
+- Delete Own Reviews
+- Review Author Authorization
+- Rating Display
+
+### User Profile
+- Personal Dashboard
+- View My Listings
+- View My Bookings
+- View My Reviews
+- Edit Profile
+- Change Password
+
+### Search & Filtering
+- Search Listings by Title, Location and Country
+- Live Search Suggestions
+- Debounced Search API
+- Category-based Filtering
+
+### User Experience
+- Responsive Design
+- Modern Landing Page
+- Sticky Booking Widget
+- Redesigned Navigation Bar
+- Scrollable Category Filters
+- Scroll-to-Bottom Button
+- Consistent Design System
 - Flash Messages for User Feedback
-- Session Management using Express Session
-- Responsive UI using Bootstrap
-- MVC Architecture
 
 ## Tech Stack
 
 ### Frontend
-- HTML
-- CSS
+- HTML5
+- CSS3
 - Bootstrap 5
+- JavaScript (ES6)
 - EJS
+- Flatpickr (Interactive Date Picker)
 
 ### Backend
 - Node.js
@@ -49,6 +99,11 @@ Wanderlust is a full-stack vacation rental platform inspired by Airbnb. Users ca
 - Cloudinary
 - Multer
 - Multer Storage Cloudinary
+
+### Session Management
+- Express Session
+- Connect Mongo
+- Connect Flash
 
 ### Other Tools
 - Express Session
@@ -82,6 +137,26 @@ Wanderlust is a full-stack vacation rental platform inspired by Airbnb. Users ca
 
 ![Create Listing](./screenshots/create-listing.png)
 
+### Booking Listing
+
+![Booking Listing](./screenshots/booking.png)
+
+### Confirmed Booking
+
+![Confirmed Booking](./screenshots/confirmed-booking.png)
+
+### User Profile
+
+![User Profile](./screenshots/profile.png)
+
+### Edit Profile
+
+![Edit Profile](./screenshots/edit-profile.png)
+
+### Change Password
+
+![Change Password](./screenshots/change-password.png)
+
 ## Project Structure
 
 ```text
@@ -90,17 +165,22 @@ Wanderlust/
 ├── controllers/
 │   ├── listings.js
 │   ├── reviews.js
-│   └── users.js
+│   ├── users.js
+│   ├── bookings.js
+│   └── profiles.js
 │
 ├── models/
 │   ├── listing.js
 │   ├── review.js
-│   └── user.js
+│   ├── user.js
+│   └── booking.js
 │
 ├── routes/
 │   ├── listing.js
 │   ├── review.js
-│   └── user.js
+│   ├── user.js
+│   ├── booking.js
+│   └── profile.js
 │
 ├── views/
 │   ├── includes/
@@ -119,16 +199,26 @@ Wanderlust/
 │   │
 │   ├── users/
 │   │   ├── signup.ejs
-│   │   └── login.ejs
+│   │   ├── login.ejs
+│   │   └── profile.ejs
+│   │
+│   ├── bookings/
+│   │   ├── booking.ejs
+│   │   └── cancellation.ejs
 │   │
 │   └── error.ejs
 │
 ├── public/
 │   ├── css/
-│   │   └── style.css
+│   │   ├── style.css
+│   │   ├── rating.css
+│   │   ├── show.css
+│   │   ├── booking-widget.css
+│   │   └── bookingdetails.css
 │   │
 │   └── js/
-│       └── script.js
+│       ├── script.js
+│       └── datePicker.js
 │
 ├── screenshots/
 │   ├── home.png
@@ -136,7 +226,12 @@ Wanderlust/
 │   ├── search.png
 │   ├── filter.png
 │   ├── login.png
-│   └── create-listing.png
+│   ├── create-listing.png
+│   ├── booking.png
+│   ├── confirmed-booking.png
+│   ├── profile.png
+│   ├── edit-profile.png
+│   └── change-password.png
 │
 ├── init/
 │   ├── data.js
@@ -144,7 +239,8 @@ Wanderlust/
 │
 ├── utils/
 │   ├── ExpressError.js
-│   └── wrapAsync.js
+│   ├── wrapAsync.js
+│   └── scheduler.js
 │
 ├── middleware.js
 ├── cloudConfig.js
@@ -201,7 +297,7 @@ CLOUD_API_SECRET=your_cloud_api_secret
 
 ## Future Improvements
     - Wishlist / Favorites Functionality
-    - Booking and Reservation System
+    - Google OAuth Authentication
     - Payment Gateway Integration
     - Interactive Maps Integration
 
@@ -210,4 +306,4 @@ CLOUD_API_SECRET=your_cloud_api_secret
 
 GitHub: https://github.com/AbdulRehan-2806
 
-This project was developed to gain hands-on experience in full-stack web development using Node.js, Express.js, MongoDB, Passport.js, Cloudinary, and the MVC architecture.
+Wanderlust was developed as a full-stack web application to gain practical experience in backend development, authentication, authorization, database design, booking workflows, session management, image storage, and modern web application architecture using Node.js, Express.js, MongoDB, Passport.js, Cloudinary, and the MVC design pattern.

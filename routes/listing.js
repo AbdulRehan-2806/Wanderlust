@@ -20,6 +20,7 @@ router.route("/")
 //New Route
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
+router.get("/api/suggestions", wrapAsync(listingController.searchSuggestions));
 
 //Router.route from Show,Update& Delete Route
 router.route("/:id")
@@ -28,7 +29,7 @@ router.route("/:id")
 .delete(isLoggedIn,isOwner, wrapAsync(listingController.destroyListing));
 
 
-
+router.get("/:id/getMaxGuests", listingController.getMaxGuests);
 //Edit Route
 router.get("/:id/edit",isLoggedIn,isOwner, wrapAsync(listingController.renderEditForm));
 

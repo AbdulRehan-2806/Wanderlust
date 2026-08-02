@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const reviewSchema = new Schema({
+    listing : {
+        type : Schema.Types.ObjectId,
+        ref : "Listing"
+    },
     comment : String,
     rating : {
         type : Number,

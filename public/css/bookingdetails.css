@@ -1,0 +1,124 @@
+.property-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+.property-header {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+.property-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #d4a574, #b8956a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+.chandelier {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #c8a882 0%, #a08660 100%);
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.chandelier::before {
+    content: '';
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background: radial-gradient(circle, #fff8dc 20%, #f4e4a6 50%, #d4a574 80%);
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.chandelier::after {
+    content: '✦';
+    position: absolute;
+    color: #fff;
+    font-size: 12px;
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+    z-index: 1;
+}
+.property-info {
+    flex: 1;
+}
+.property-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+.property-type {
+    font-size: 14px;
+    color: #717171;
+    margin-bottom: 8px;
+}
+.property-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+}
+.star {
+    color: #ff385c;
+}
+.rating-text {
+    color: #222;
+    font-weight: 500;
+}
+.reviews-count {
+    color: #717171;
+}
+.total-section {
+    border-top: 1px solid #ebebeb;
+    padding-top: 24px;
+}
+.total-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 24px;
+}
+.price-details {
+    margin-bottom: 16px;
+}
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 16px;
+}
+.price-label {
+    color: #222;
+}
+.price-value {
+    color: #222;
+    font-weight: 500;
+}
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #ebebeb;
+    font-size: 16px;
+    font-weight: 600;
+}
+.total-label {
+    color: #222;
+}
+.total-amount {
+    color: #222;
+}

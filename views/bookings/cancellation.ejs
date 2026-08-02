@@ -1,0 +1,41 @@
+<% layout("/layouts/boilerplate") %>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="col-8 offset-1 mb-2 mt-3">
+            <h2 style="font-size: x-large;">Booking details</h2>
+        </div>
+        <div class="booking-details-container">
+            <div class="card col-4 offset-1 show-card listing-card booking-dates">
+                <div class="card col-6 show-card listing-card mb-1">
+                    <p class="card-text plus-jakarta-sans-font mt-3" style="font-weight: 700; font-size: large;">Your trip</p>
+                </div>
+                <div class="booking-details-row">
+                    <p class="card-text plus-jakarta-sans-font mt-3" style="font-size:medium;"><b>Dates</b><br><%= booking.checkIn.toDateString().substring(4) %> - <%= booking.checkOut.toDateString().substring(4) %></p>
+                </div>
+                <div class="booking-details-row mb-2">
+                    <p class="card-text plus-jakarta-sans-font mt-3" style="font-size:medium;"><b>Guests</b><br><%= booking.guests %></p>
+                </div>
+                <div class="booking-details-row mb-2">
+                    <p class="card-text plus-jakarta-sans-font mt-3" style="font-size:medium;"><b>Total</b><br>&#8377;<%= booking.totalPrice.toLocaleString("en-IN") %></p>
+                </div>
+                <hr>
+                <form method="POST" action="/listings/<%= id %>/bookings/<%= booking._id %>?_method=DELETE">
+                    <button class="availability-button">Cancel Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="property-card mt-3">
+            <div class="property-header">
+                <div class="property-image">
+                    <img src="<%= booking.listing.image.url %>" alt="Listing Image" width="80" height="80" style="border-radius: 8px; object-fit: cover;">
+                </div>
+                <div class="property-info">
+                    <h2 class="property-title"><%= booking.listing.title %></h2>
+                    <p class="property-type">Entire rental unit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

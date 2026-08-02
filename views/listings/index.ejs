@@ -1,120 +1,158 @@
 <% layout("/layouts/boilerplate") %>
-    <style>
-        #filters{
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .filter{
-            text-align: center;
-            margin-right: 2rem;
-            margin-top: 2rem;
-            opacity: 0.7;
-        }
-        .filter:hover{
-            opacity: 1;
-            cursor: pointer;
-        }
-        .filter p{
-            font-size: 0.8rem;
-        }
-        .tax-info{
-            display: none;
-        }
-        .tax-toggle{
-            border: 1px solid black;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            height: fit-content;
-            padding: 1rem;
-            margin-left: auto;
-        }
 
-    </style>
-    <div id="filters">
-        <a href="/listings" class="filter listing-link">
-        <div><i class="fa-solid fa-border-all"></i></div>
-        <p>All</p>
-        </a>
-        <a href="/listings?category=trending"class="filter listing-link">
-            <div><i class="fa-solid fa-fire"></i></div>
+<div class="hero">
+    <svg class="hero-flightpath" viewBox="0 0 660 100" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10,60 Q 340,-40 660,60" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round"/>
+        <circle cx="10" cy="60" r="4" fill="#E7A93E"/>
+        <circle cx="660" cy="60" r="4" fill="#E7A93E"/>
+        <text font-size="20" fill="#ffffff">
+            <animateMotion dur="8s" repeatCount="indefinite" path="M10,60 Q 340,-40 660,60" rotate="auto"/>
+            &#9992;
+        </text>
+    </svg>
+
+    <span class="hero-eyebrow">Wanderlust</span>
+    <h1>Wander, <em>freely.</em></h1>
+    <p>Handpicked stays in the world's most memorable places — from mountain cabins to city icons.</p>
+
+    <a href="#listings-start" class="scroll-cue" aria-label="Scroll to listings">
+        <span>More below</span>
+        <i class="fa-solid fa-chevron-down"></i>
+    </a>
+</div>
+
+<div class="container">
+    <div id="listings-start"></div>
+    <div class="category-rail-wrap">
+        <button type="button" class="rail-arrow" id="rail-left" aria-label="Scroll categories left">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div id="filters">
+            <a href="/listings" class="filter listing-link <%= typeof category === 'undefined' || !category ? 'active' : '' %>">
+                <div class="stamp"><i class="fa-solid fa-border-all"></i></div>
+                <p>All</p>
+            </a>
+            <a href="/listings?category=trending" class="filter listing-link <%= category === 'trending' ? 'active' : '' %>">
+                <div class="stamp"><i class="fa-solid fa-fire"></i></div>
                 <p>Trending</p>
-        </a>
-        <a href="/listings?category=rooms" class="filter listing-link">
-            <div><i class="fa-solid fa-bed"></i></div>
+            </a>
+            <a href="/listings?category=rooms" class="filter listing-link <%= category === 'rooms' ? 'active' : '' %>">
+                <div class="stamp"><i class="fa-solid fa-bed"></i></div>
                 <p>Rooms</p>
-        </a>
-        <a href="/listings?category=iconic city" class="filter listing-link">
-            <div><i class="fa-solid fa-mountain-city"></i></div>
+            </a>
+            <a href="/listings?category=iconic city" class="filter listing-link <%= category === 'iconic city' ? 'active' : '' %>">
+                <div class="stamp"><i class="fa-solid fa-mountain-city"></i></div>
                 <p>Iconic City</p>
-        </a>
-        <a href="/listings?category=mountains" class="filter listing-link">
-            <div><i class="fa-solid fa-mountain"></i></div>
+            </a>
+            <a href="/listings?category=mountains" class="filter listing-link <%= category === 'mountains' ? 'active' : '' %>">
+                <div class="stamp"><i class="fa-solid fa-mountain"></i></div>
                 <p>Mountains</p>
-        </a>
-        <a href="/listings?category=castles" class="filter listing-link">
-            <div><i class="fa-brands fa-fort-awesome"></i></div>
+            </a>
+            <a href="/listings?category=castles" class="filter listing-link <%= category === 'castles' ? 'active' : '' %>">
+                <div class="stamp"><i class="fa-brands fa-fort-awesome"></i></div>
                 <p>Castles</p>
-        </a>
-        <a href="/listings?category=amazing pools" class="filter listing-link">
-            <div><i class="fa-solid fa-person-swimming"></i></div>
+            </a>
+            <a href="/listings?category=amazing pools" class="filter listing-link <%= category === 'amazing pools' ? 'active' : '' %>">
+                <div class="stamp"><i class="fa-solid fa-person-swimming"></i></div>
                 <p>Amazing pools</p>
-        </a>
-        <a href="/listings?category=camping" class="filter listing-link">
-            <div><i class="fa-solid fa-campground"></i></div>
+            </a>
+            <a href="/listings?category=camping" class="filter listing-link <%= category === 'camping' ? 'active' : '' %>">
+                <div class="stamp"><i class="fa-solid fa-campground"></i></div>
                 <p>Camping</p>
-        </a>
-        <a href="/listings?category=farms" class="filter listing-link">
-            <div><i class="fa-solid fa-cow"></i></div>
+            </a>
+            <a href="/listings?category=farms" class="filter listing-link <%= category === 'farms' ? 'active' : '' %>">
+                <div class="stamp"><i class="fa-solid fa-cow"></i></div>
                 <p>Farms</p>
-        </a>
-        <a href="/listings?category=arctic" class="filter listing-link">
-            <div><i class="fa-solid fa-snowflake"></i></div>
+            </a>
+            <a href="/listings?category=arctic" class="filter listing-link <%= category === 'arctic' ? 'active' : '' %>">
+                <div class="stamp"><i class="fa-solid fa-snowflake"></i></div>
                 <p>Arctic</p>
-        </a>
+            </a>
+        </div>
+
+        <button type="button" class="rail-arrow" id="rail-right" aria-label="Scroll categories right">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+
         <div class="tax-toggle">
-            <div class="form-check-reverse form-switch">
+            <div class="form-check-reverse form-switch mb-0">
                 <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
                 <label class="form-check-label" for="switchCheckDefault">Display total after Taxes</label>
             </div>
         </div>
     </div>
+
     <% if(allListings.length === 0){ %>
         <div class="alert alert-danger mt-3">
             No listings found matching your search.
         </div>
+    <% } %>
 
-<% } %>
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
         <% for(let listing of allListings){ %>
-        <a href="/listings/<%= listing._id%>" class="listing-link">
-    <div class="card col listing-card" >
-    <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 20rem">
-    <div class="card-img-overlay">1234</div>
-    <div class="card-body">
-        <p class="card-text">
-            <b><%= listing.title%></b> <br>
-            &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
-            <i class="tax-info">&nbsp; &nbsp; +18% GST</i>
-        </p>
+        <a href="/listings/<%= listing._id%>" class="listing-link col">
+            <div class="listing-card-inner">
+                <div class="img-frame">
+                    <img src="<%=listing.image.url%>" class="card-img-top" alt="listing_image" style="height: 20rem">
+                    <div class="card-img-overlay"></div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        <b><%= listing.title%></b> <br>
+                        &#8377;<%= listing.price.toLocaleString("en-IN") %> /night
+                        <i class="tax-info" style="display:none;">&nbsp; &nbsp; +18% GST</i>
+                    </p>
+                </div>
+            </div>
+        </a>
+        <% } %>
     </div>
-    </div>
-     <% } %>
-     </a>
-    </div>
+</div>
 
-    <script>
-        let taxswitch = document.getElementById("switchCheckDefault");
-        taxswitch.addEventListener("click",()=>{
-            let taxinfo = document.getElementsByClassName("tax-info");
-            if(taxswitch.checked){
-                for(let i=0;i<taxinfo.length;i++){
-                    taxinfo[i].style.display = "inline";
-                }
-            }else{
-                for(let i=0;i<taxinfo.length;i++){
-                    taxinfo[i].style.display = "none";
-                }
+<button id="floating-scroll-btn" class="floating-scroll-btn" aria-label="Scroll to bottom">
+    <i class="fa-solid fa-chevron-down"></i>
+</button>
+
+<script>
+    let taxswitch = document.getElementById("switchCheckDefault");
+    taxswitch.addEventListener("click",()=>{
+        let taxinfo = document.getElementsByClassName("tax-info");
+        if(taxswitch.checked){
+            for(let i=0;i<taxinfo.length;i++){
+                taxinfo[i].style.display = "inline";
             }
-        })
-    </script>
+        }else{
+            for(let i=0;i<taxinfo.length;i++){
+                taxinfo[i].style.display = "none";
+            }
+        }
+    });
+
+    const rail = document.getElementById("filters");
+    document.getElementById("rail-left").addEventListener("click", () => {
+        rail.scrollBy({ left: -240, behavior: "smooth" });
+    });
+    document.getElementById("rail-right").addEventListener("click", () => {
+        rail.scrollBy({ left: 240, behavior: "smooth" });
+    });
+
+    // Floating "more below" button: show once scrolled past the hero,
+    // hide again once we're within ~80px of the bottom of the page.
+    const floatBtn = document.getElementById("floating-scroll-btn");
+    function updateFloatBtn(){
+        const scrolledPastHero = window.scrollY > 200;
+        const nearBottom = (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 80;
+        if(scrolledPastHero && !nearBottom){
+            floatBtn.classList.add("visible");
+        } else {
+            floatBtn.classList.remove("visible");
+        }
+    }
+    window.addEventListener("scroll", updateFloatBtn);
+    window.addEventListener("resize", updateFloatBtn);
+    updateFloatBtn();
+    floatBtn.addEventListener("click", () => {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    });
+</script>
